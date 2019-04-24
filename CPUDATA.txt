@@ -1,0 +1,6 @@
+Intel Core i9-9980XE, 29370, 1999.99
+Intel Core i9-9960X, 29211, 1699.00
+AMD Ryzen 5 1600, 102.33, 119.99
+AMD Ryzen Threadripper 1900X, 16140, 299.99
+Intel Xeon E5-2665, 11545 ,57.32
+Intel Xeon E5-2660, 11085, 69.95
