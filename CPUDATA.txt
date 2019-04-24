@@ -4,3 +4,33 @@ AMD Ryzen 5 1600, 102.33, 119.99
 AMD Ryzen Threadripper 1900X, 16140, 299.99
 Intel Xeon E5-2665, 11545 ,57.32
 Intel Xeon E5-2660, 11085, 69.95
+AMD FX-9590 Eight-Core, 10193, 178.50
+Intel Xeon E5-2640 v2, 10143, 135.77
+AMD Opteron 6380, 10081, 96.99
+AMD Ryzen 5 1500X, 10074, 157.12
+AMD FX-9370 Eight-Core, 9445, 585
+Intel Core i7-4850HQ, 9051, 434.00
+Intel Xeon E5-1620, 9040, 329.93
+AMD FX-8370 Eight-Core, 9036, 131.99
+Intel Xeon E5-4617, 9029, 89.90
+Intel Xeon W3680, 9026,	759.95
+Intel Core i7-3770S, 8893, 304.99
+AMD Opteron 6276, 8889, 169.00
+Intel Xeon X5690, 8883, 188.99
+Intel Xeon E3-1230 V2, 8860, 144.00
+Intel Xeon E5-2630, 8860, 95.21
+Intel Xeon E3-1268L, 8695, 377.00
+ Intel Core i7-2700K, 8687, 403.88
+ Intel Xeon E5-2620 v2, 8685, 34.65
+ Intel Xeon E5-2650L, 8676, 79.00
+ Intel Core i3-8300, 8657, 177.46
+ Intel Core i7-4810MQ, 8649, 424.95
+ Intel Core i7-980, 8643, 199.98
+ Intel Xeon E5-2420 v2, 8632, 203.00
+ Intel Xeon E5645, 6424, 79.99
+  Intel Xeon X5672, 6419, 283.72
+  Intel Core i5-7400T, 6418, 327.99
+  Intel Core i3-7320, 6413, 182.72
+  Intel Core i5-4460S, 6410, 659.99
+  AMD FX-6300 Six-Core, 6389, 67.99
+  AMD Opteron 3380, 6384, 809.00

@@ -7,7 +7,18 @@ public class CPU {
 
     public CPU(String name, String benchmark, String price){
         cpuName = name;
-        cpuBenchmark = Double.valueOf(benchmark);
-        cpuPrice = Double.valueOf(price);
+        try {
+            cpuBenchmark = Double.valueOf(benchmark);
+        }catch(NumberFormatException e){
+            System.out.println("********************ERROR*************************");
+            System.out.println("Benchmark value for " + cpuName +" is not a number.\n\n");
+
+        }
+        try {
+            cpuPrice = Double.valueOf(price);
+        }catch(NumberFormatException e){
+        System.out.println("********************ERROR*************************");
+        System.out.println("Price value for " + cpuName +" is not a number.\n\n");
+    }
     }
 }
