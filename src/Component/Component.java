@@ -7,6 +7,8 @@ public abstract class Component {
    public abstract String getName();
    public abstract Double getBenchmark();
    public abstract Double getPrice();
+   public abstract Double getField(String type);
+
 
 
 }

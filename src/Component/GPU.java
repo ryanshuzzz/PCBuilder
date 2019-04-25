@@ -35,6 +35,16 @@ public class GPU extends Component {
     public Double getPrice() {
         return this.price;
     }
+
+    @Override
+    public Double getField(String type) {
+        if (type.equals("price")) {
+            return getPrice();
+        } else if (type.equals("benchmark")) {
+            return getBenchmark();
+        }
+        return null;
+    }
 /*    public String gpuName;
     public Double gpuBenchmark;
     public Double gpuPrice;
