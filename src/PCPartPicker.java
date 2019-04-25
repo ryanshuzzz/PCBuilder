@@ -1,17 +1,18 @@
+import Component.CPU;
+import Component.Component;
+import Component.GPU;
+
 import java.io.*;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class PCPartPicker {
-    public static Map<String, CPU> cpuMap = new HashMap<>();
-    public static Map<String, GPU> gpuMap = new HashMap<>();
-    public static ArrayList<String> cpuList = new ArrayList<>();
-    public static ArrayList<String> gpuList = new ArrayList<>();
-    public static String processorFile = "CPUDATA.txt";
-    public static String gpuFile = "GPUDATA.txt";
+    private static Map<String, Component> cpuMap = new HashMap<>();
+    private static Map<String, Component> gpuMap = new HashMap<>();
+    private static ArrayList<String> cpuList = new ArrayList<>();
+    private static ArrayList<String> gpuList = new ArrayList<>();
+    private static String processorFile = "CPUDATA.txt";
+    private static String gpuFile = "GPUDATA.txt";
 
     public static void main(String[] args) throws IOException{
         if(checkInputFile(processorFile) && checkInputFile(gpuFile)){
@@ -21,16 +22,19 @@ public class PCPartPicker {
             File inputGPUFile = new File(gpuFile);
             input = new Scanner(inputGPUFile);
             parseFile(input, gpuFile);
-        }else{
-            System.out.println("Error reading/writing to " + processorFile + " & " + gpuFile);
         }
+        printDebug();
     }
     private static boolean checkInputFile(String inputFileName){
         Path filePath = Paths.get(inputFileName);
         if(!Files.exists(filePath)){
             fileNotFountError(inputFileName);
         }
-        System.out.println(inputFileName + " read success.");
+        if(Files.exists(filePath)) {
+            System.out.println(inputFileName + " read success.");
+        } else{
+            System.out.println(inputFileName + " does not exist.");
+        }
         return Files.exists(filePath);
     }
     private static void fileNotFountError(String fileName){
@@ -49,29 +53,81 @@ public class PCPartPicker {
             System.out.println("Exiting...");
         }
     }
-    private static void parseFile(Scanner input, String fileName){
-        while(input.hasNext()) {
+    private static void parseFile(Scanner input, String fileName) {
+        while (input.hasNext()) {
             String nextLine = input.nextLine();
             String[] separated = nextLine.split(",");
-            if(separated.length == 3 && fileName.equals(processorFile)) {
-                cpuMap.put(separated[0], new CPU(separated[0], separated[1], separated[2]));
+            if (separated.length == 3 && fileName.equals(processorFile)) {
+                CPU newCPU = new CPU();
+                newCPU.setName(separated[0]);
+                try {
+                    double benchmark = Double.valueOf(separated[1]);
+                    newCPU.setBenchmark(benchmark);
+                } catch (NumberFormatException e) {
+                    System.out.println("********************ERROR*************************");
+                    System.out.println("Benchmark value for " + separated[0] + " is not a number.\n\n");
+                }
+                try {
+                    double price = Double.valueOf(separated[2]);
+                    newCPU.setPrice(price);
+                } catch (NumberFormatException e) {
+                    System.out.println("********************ERROR*************************");
+                    System.out.println("Price value for " + separated[0] + " is not a number.\n\n");
+                }
+                cpuMap.put(separated[0], newCPU);
                 cpuList.add(separated[0]);
-            }else if (separated.length == 3&& fileName.equals(gpuFile)){
-                gpuMap.put(separated[0], new GPU(separated[0], separated[1], separated[2]));
+            } else if (separated.length == 3 && fileName.equals(gpuFile)) {
+                GPU newGPU = new GPU();
+                newGPU.setName(separated[0]);
+                try {
+                    double benchmark = Double.valueOf(separated[1]);
+                    newGPU.setBenchmark(benchmark);
+                } catch (NumberFormatException e) {
+                    System.err.println("********************ERROR*************************");
+                    System.err.println("Benchmark value for " + separated[0] + " is not a number.\n\n");
+                }
+                try {
+                    double price = Double.valueOf(separated[2]);
+                    newGPU.setPrice(price);
+                } catch (NumberFormatException e) {
+                    System.err.println("********************ERROR*************************");
+                    System.err.println("Price value for " + separated[0] + " is not a number.\n\n");
+                }
+                gpuMap.put(separated[0], newGPU);
                 gpuList.add(separated[0]);
-            }else{
+            } else {
                 System.out.println("Incorrect formatting in " + fileName);
             }
         }
         input.close();
- /*       //DEBUG TO PRINT FULL CPU LIST + INFO
-        for (int i = 0; i < cpuList.size(); i++ )
-            System.out.println(cpuList.get(i) + " benchmark " + cpuMap.get(cpuList.get(i)).cpuBenchmark + " price " + cpuMap.get(cpuList.get(i)).cpuPrice);
-*/
-/*
-        //DEBUG TO PRINT FULL GPU LIST + INFO
-        for (int i = 0; i < gpuList.size(); i++ )
-            System.out.println(gpuList.get(i) + " benchmark " + gpuMap.get(gpuList.get(i)).gpuBenchmark + " price " + gpuMap.get(gpuList.get(i)).gpuPrice);
-*/
     }
+    private static void printDebug(){
+     //DEBUG TO PRINT FULL Component.CPU LIST + INFO
+        sortList(cpuList, cpuMap);
+        for (int i = 0; i < cpuList.size(); i++ ) {
+            System.err.printf("%-30s benchmark: %-10s price: %-10s \n", cpuList.get(i), cpuMap.get(cpuList.get(i)).getBenchmark(), cpuMap.get(cpuList.get(i)).getPrice());
+        }
+        System.out.println("\n\n");
+        //DEBUG TO PRINT FULL Component.GPU LIST + INFO
+        sortList(gpuList, gpuMap);
+
+        for (int i = 0; i < gpuList.size(); i++ )
+            System.err.printf("%-30s benchmark: %-10s price: %-10s \n", gpuList.get(i), gpuMap.get(gpuList.get(i)).getBenchmark(), gpuMap.get(gpuList.get(i)).getPrice());
+    }
+
+    //insertion sort the list of strings based on price values
+    private static void sortList(ArrayList list, Map<String, Component> map ){
+
+        for(int i=1; i < list.size(); i++){
+            for (int j = i; j>0; j--){
+                Double firstVal = map.get(list.get(j-1)).getPrice();
+                Double secVal = map.get(list.get(j)).getPrice();
+                if (firstVal > secVal){
+                    Collections.swap(list, j, j-1);
+                }
+
+            }
+        }
+    }
+
 }
