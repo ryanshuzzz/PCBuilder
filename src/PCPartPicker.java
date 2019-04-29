@@ -67,6 +67,8 @@ public class PCPartPicker {
             }}
         }
     }
+
+    //checks if files exist
     private static boolean checkInputFile(String inputFileName){
         Path filePath = Paths.get(inputFileName);
         if(!Files.exists(filePath)){
@@ -79,6 +81,8 @@ public class PCPartPicker {
         }
         return Files.exists(filePath);
     }
+
+    //generic error message for not being able to open file
     private static void fileNotFountError(String fileName){
         System.out.println(fileName + " does not exist. Would you like to create the file? (yes/no)"); //creates the file if not exist
         Scanner key = new Scanner(System.in);
@@ -95,6 +99,8 @@ public class PCPartPicker {
             System.out.println("Exiting...");
         }
     }
+
+    //parses files and checks for errors in formatting
     private static void parseFile(Scanner input, String fileName) {
         while (input.hasNext()) {
             String nextLine = input.nextLine();
@@ -177,8 +183,10 @@ public class PCPartPicker {
         }
         return i-1;
     }
+
+
+    //this method finds the best combination of components (knapsack implementation
     private static String[] findBestCombination(int possibleCPUS, int possibleGPUS, Double maxBudget){
-//        ArrayList<Component> bestCombination = new ArrayList<>();
         String [] bestCombination = new String[2];
         Double maxCPUBenchmark = findMaxBenchmark(cpuList, cpuMap).getBenchmark();
         Double maxGPUBenchmark = findMaxBenchmark(gpuList, gpuMap).getBenchmark();
