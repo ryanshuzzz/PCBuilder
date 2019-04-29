@@ -161,13 +161,13 @@ public class PCPartPicker {
     }
     private static String[] findBestCombination(int possibleCPUS, int possibleGPUS, Double maxBudget){
 //        ArrayList<Component> bestCombination = new ArrayList<>();
-        String [] bestCombination = new String[1];
+        String [] bestCombination = new String[2];
         Double max = 0.0;
         for(int i =0; i < possibleCPUS; i++){
-            for (int j = 0; j < possibleGPUS; i++){
+            for (int j = 0; j < possibleGPUS; j++){
                 if(cpuMap.get(cpuList.get(i)).getPrice()+gpuMap.get(gpuList.get(j)).getPrice() < maxBudget){
-                    Double cpuRatio = cpuMap.get(cpuList.get(i)).getBenchmark()/cpuMap.get(cpuList.size()-1).getBenchmark();
-                    Double gpuRatio = gpuMap.get(gpuList.get(j)).getBenchmark()/gpuMap.get(gpuList.size()-1).getBenchmark();
+                    Double cpuRatio = cpuMap.get(cpuList.get(i)).getBenchmark()/cpuMap.get(cpuList.get(cpuList.size()-1)).getBenchmark();
+                    Double gpuRatio = gpuMap.get(gpuList.get(j)).getBenchmark()/gpuMap.get(gpuList.get(gpuList.size()-1)).getBenchmark();
                     if(cpuRatio + gpuRatio > max){
                         max = cpuRatio + gpuRatio;
                         bestCombination[0] = cpuList.get(i);
@@ -175,6 +175,9 @@ public class PCPartPicker {
                      }
                 }
             }
+        }
+        for(int z =0; z < bestCombination.length; z++){
+            System.out.println(bestCombination[z]);
         }
         return bestCombination;
     }
