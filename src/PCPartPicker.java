@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -102,7 +101,9 @@ public class PCPartPicker {
 
     //parses files and checks for errors in formatting within files && closes input file
     private static void parseFile(Scanner input, String fileName) {
+        int i=0;
         while (input.hasNext()) {
+            i++;
             String nextLine = input.nextLine();
             String[] separated = nextLine.split(",");
             if (separated.length == 3 && fileName.equals(processorFile)) {
@@ -144,14 +145,14 @@ public class PCPartPicker {
                 gpuMap.put(separated[0], newGPU);
                 gpuList.add(separated[0]);
             } else {
-                System.out.println("Incorrect formatting in " + fileName);
+                System.out.println("Incorrect formatting in " + fileName + "on line #" + i);
             }
         }
         input.close();
     }
 
     //finds the max benchmark in entire list, using heapsort
-    private static Component findMaxBenchmark(ArrayList list, Map<String, Component> map ){
+    private static Component findMaxBenchmark(ArrayList<String> list, Map<String, Component> map ){
         Heapsort newSort = new Heapsort();
         newSort.heapSort("benchmark", list, map);
         Component returnVal = map.get(list.get(list.size()-1));
@@ -160,7 +161,7 @@ public class PCPartPicker {
     }
 
     //do modified binary search of possible components in list
-    private static int findPossible(Double budget, ArrayList list, Map<String, Component> map){
+    private static int findPossible(Double budget, ArrayList<String> list, Map<String, Component> map){
         int length = list.size();
 
         if (budget <= map.get(list.get(0)).getPrice()){

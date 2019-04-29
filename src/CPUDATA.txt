@@ -20,17 +20,17 @@ Intel Xeon X5690, 8883, 188.99
 Intel Xeon E3-1230 V2, 8860, 144.00
 Intel Xeon E5-2630, 8860, 95.21
 Intel Xeon E3-1268L, 8695, 377.00
- Intel Core i7-2700K, 8687, 403.88
- Intel Xeon E5-2620 v2, 8685, 34.65
- Intel Xeon E5-2650L, 8676, 79.00
- Intel Core i3-8300, 8657, 177.46
- Intel Core i7-4810MQ, 8649, 424.95
- Intel Core i7-980, 8643, 199.98
- Intel Xeon E5-2420 v2, 8632, 203.00
- Intel Xeon E5645, 6424, 79.99
-  Intel Xeon X5672, 6419, 283.72
-  Intel Core i5-7400T, 6418, 327.99
-  Intel Core i3-7320, 6413, 182.72
-  Intel Core i5-4460S, 6410, 659.99
-  AMD FX-6300 Six-Core, 6389, 67.99
-  AMD Opteron 3380, 6384, 809.00
+Intel Core i7-2700K, 8687, 403.88
+Intel Xeon E5-2620 v2, 8685, 34.65
+Intel Xeon E5-2650L, 8676, 79.00
+Intel Core i3-8300, 8657, 177.46
+Intel Core i7-4810MQ, 8649, 424.95
+Intel Core i7-980, 8643, 199.98
+Intel Xeon E5-2420 v2, 8632, 203.00
+Intel Xeon E5645, 6424, 79.99
+Intel Xeon X5672, 6419, 283.72
+Intel Core i5-7400T, 6418, 327.99
+Intel Core i3-7320, 6413, 182.72
+Intel Core i5-4460S, 6410, 659.99
+AMD FX-6300 Six-Core, 6389, 67.99
+AMD Opteron 3380, 6384, 809.00
