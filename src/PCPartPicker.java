@@ -1,10 +1,16 @@
-import Component.CPU;
-import Component.Component;
-import Component.GPU;
+import Component.*;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Scanner;
+
 
 public class PCPartPicker {
     private static Map<String, Component> cpuMap = new HashMap<>();
@@ -14,7 +20,7 @@ public class PCPartPicker {
     private static String processorFile = "CPUDATA.txt";
     private static String gpuFile = "GPUDATA.txt";
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         if(checkInputFile(processorFile) && checkInputFile(gpuFile)){
             File inputProccessorFile = new File(processorFile);
             Scanner input = new Scanner(inputProccessorFile);
@@ -25,13 +31,27 @@ public class PCPartPicker {
         }
         sortList("price", cpuList, cpuMap);
         sortList("price", gpuList, gpuMap);
-        Scanner key = new Scanner(System.in);
-        System.out.println("Please enter your budget. ");
-        String budget = key.nextLine();
-        Double maxBudget = Double.valueOf(budget);
-        int possibleCPUS = findPossible(maxBudget, cpuList, cpuMap);
-        int possibleGPUS = findPossible(maxBudget, gpuList, gpuMap);
-        findBestCombination(possibleCPUS, possibleGPUS, maxBudget);
+        while(true) {
+            Scanner key = new Scanner(System.in);
+            System.out.println("Please enter your budget. Type 'exit' to exit.");
+            String budget = key.nextLine();
+            if(budget.equals("exit"))
+                break;
+
+            Double maxBudget = Double.valueOf(budget);
+            int possibleCPUS = findPossible(maxBudget, cpuList, cpuMap);
+            int possibleGPUS = findPossible(maxBudget, gpuList, gpuMap);
+            String[] bestCombination = findBestCombination(possibleCPUS, possibleGPUS, maxBudget);
+            if (bestCombination != null) {
+                Component finalCPU = cpuMap.get(bestCombination[0]);
+                Component finalGPU = gpuMap.get(bestCombination[1]);
+                System.out.printf("Best Build:   %-10s %-10s%nBenchmark:    %-10s %-10s%nPrice:        %-10s %-10s%n", finalCPU.getName()
+                        , finalGPU.getName(), finalCPU.getBenchmark(), finalGPU.getBenchmark(), finalCPU.getPrice(), finalGPU.getPrice());
+                System.out.printf("----------------------------%nTotal:       $%-10s%n", finalCPU.getPrice() + finalGPU.getPrice());
+            } else {
+                System.out.println("This budget is too low for any possible builds.");
+            }
+        }
     }
     private static boolean checkInputFile(String inputFileName){
         Path filePath = Paths.get(inputFileName);
@@ -109,6 +129,7 @@ public class PCPartPicker {
         }
         input.close();
     }
+
     private static void printDebug(){
      //DEBUG TO PRINT FULL Component.CPU LIST + INFO
         for (int i = 0; i < cpuList.size(); i++ ) {
@@ -134,6 +155,12 @@ public class PCPartPicker {
 
             }
         }
+    }
+    private static Component findMaxBenchmark(ArrayList list, Map<String, Component> map ){
+        sortList("benchmark", list, map);
+        Component returnVal = map.get(list.get(list.size()-1));
+        sortList("price", list, map);
+        return returnVal;
     }
     //do modified binary search of possible components in list
     private static int findPossible(Double budget, ArrayList list, Map<String, Component> map){
@@ -162,12 +189,16 @@ public class PCPartPicker {
     private static String[] findBestCombination(int possibleCPUS, int possibleGPUS, Double maxBudget){
 //        ArrayList<Component> bestCombination = new ArrayList<>();
         String [] bestCombination = new String[2];
+        Double maxCPUBenchmark = findMaxBenchmark(cpuList, cpuMap).getBenchmark();
+        Double maxGPUBenchmark = findMaxBenchmark(gpuList, gpuMap).getBenchmark();
         Double max = 0.0;
-        for(int i =0; i < possibleCPUS; i++){
-            for (int j = 0; j < possibleGPUS; j++){
-                if(cpuMap.get(cpuList.get(i)).getPrice()+gpuMap.get(gpuList.get(j)).getPrice() < maxBudget){
-                    Double cpuRatio = cpuMap.get(cpuList.get(i)).getBenchmark()/cpuMap.get(cpuList.get(cpuList.size()-1)).getBenchmark();
-                    Double gpuRatio = gpuMap.get(gpuList.get(j)).getBenchmark()/gpuMap.get(gpuList.get(gpuList.size()-1)).getBenchmark();
+
+        for(int i =0; i <= possibleCPUS; i++){
+            for (int j = 0; j <= possibleGPUS; j++){
+                if(cpuMap.get(cpuList.get(i)).getPrice()+gpuMap.get(gpuList.get(j)).getPrice() <= maxBudget){
+
+                    Double cpuRatio = cpuMap.get(cpuList.get(i)).getBenchmark()/maxCPUBenchmark;
+                    Double gpuRatio = gpuMap.get(gpuList.get(j)).getBenchmark()/maxGPUBenchmark;
                     if(cpuRatio + gpuRatio > max){
                         max = cpuRatio + gpuRatio;
                         bestCombination[0] = cpuList.get(i);
@@ -176,9 +207,9 @@ public class PCPartPicker {
                 }
             }
         }
-        for(int z =0; z < bestCombination.length; z++){
-            System.out.println(bestCombination[z]);
-        }
+        if (max == 0.0)
+            return null;
+
         return bestCombination;
     }
 
