@@ -1,5 +1,4 @@
 import Component.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,15 +28,30 @@ public class PCPartPicker {
             input = new Scanner(inputGPUFile);
             parseFile(input, gpuFile);
         }
-        sortList("price", cpuList, cpuMap);
-        sortList("price", gpuList, gpuMap);
+        Heapsort cpuSort = new Heapsort();
+        Heapsort gpuSort = new Heapsort();
+        cpuSort.heapSort("price", cpuList, cpuMap);
+        gpuSort.heapSort("price", gpuList, gpuMap);
+
         while(true) {
             Scanner key = new Scanner(System.in);
             System.out.println("Please enter your budget. Type 'exit' to exit.");
             String budget = key.nextLine();
-            if(budget.equals("exit"))
+            if(budget.equals("exit")) {
                 break;
+            }else if (budget.equals("c")){
+                final String os = System.getProperty("os.name");
+                try{
+                if(os.contains("Windows")){
+                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                } else
+                {
+                    Runtime.getRuntime().exec("clear");
+                }}catch(IOException | InterruptedException ex){
 
+                }
+
+            }else{
             Double maxBudget = Double.valueOf(budget);
             int possibleCPUS = findPossible(maxBudget, cpuList, cpuMap);
             int possibleGPUS = findPossible(maxBudget, gpuList, gpuMap);
@@ -47,10 +61,10 @@ public class PCPartPicker {
                 Component finalGPU = gpuMap.get(bestCombination[1]);
                 System.out.printf("Best Build:   %-10s %-10s%nBenchmark:    %-10s %-10s%nPrice:        %-10s %-10s%n", finalCPU.getName()
                         , finalGPU.getName(), finalCPU.getBenchmark(), finalGPU.getBenchmark(), finalCPU.getPrice(), finalGPU.getPrice());
-                System.out.printf("----------------------------%nTotal:       $%-10s%n", finalCPU.getPrice() + finalGPU.getPrice());
+                System.out.printf("----------------------------%nTotal Cost:  $%-10s%n", finalCPU.getPrice() + finalGPU.getPrice());
             } else {
                 System.out.println("This budget is too low for any possible builds.");
-            }
+            }}
         }
     }
     private static boolean checkInputFile(String inputFileName){
@@ -130,38 +144,15 @@ public class PCPartPicker {
         input.close();
     }
 
-    private static void printDebug(){
-     //DEBUG TO PRINT FULL Component.CPU LIST + INFO
-        for (int i = 0; i < cpuList.size(); i++ ) {
-            System.err.printf("%-30s benchmark: %-10s price: %-10s \n", cpuList.get(i), cpuMap.get(cpuList.get(i)).getBenchmark(), cpuMap.get(cpuList.get(i)).getPrice());
-        }
-        System.out.println("\n\n");
-        //DEBUG TO PRINT FULL Component.GPU LIST + INFO
-
-        for (int i = 0; i < gpuList.size(); i++ )
-            System.err.printf("%-30s benchmark: %-10s price: %-10s \n", gpuList.get(i), gpuMap.get(gpuList.get(i)).getBenchmark(), gpuMap.get(gpuList.get(i)).getPrice());
-    }
-
-    //insertion sort the list of strings based on 'TYPE' given either benchmark or price
-    private static void sortList(String Type, ArrayList list, Map<String, Component> map ){
-
-        for(int i=1; i < list.size(); i++){
-            for (int j = i; j>0; j--){
-                Double firstVal = map.get(list.get(j-1)).getField(Type);
-                Double secVal = map.get(list.get(j)).getField(Type);
-                if (firstVal > secVal){
-                    Collections.swap(list, j, j-1);
-                }
-
-            }
-        }
-    }
+    //finds the max benchmark in entire list, using heapsort
     private static Component findMaxBenchmark(ArrayList list, Map<String, Component> map ){
-        sortList("benchmark", list, map);
+        Heapsort newSort = new Heapsort();
+        newSort.heapSort("benchmark", list, map);
         Component returnVal = map.get(list.get(list.size()-1));
-        sortList("price", list, map);
+        newSort.heapSort("price", list, map);
         return returnVal;
     }
+
     //do modified binary search of possible components in list
     private static int findPossible(Double budget, ArrayList list, Map<String, Component> map){
         int length = list.size();
