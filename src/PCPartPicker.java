@@ -100,7 +100,7 @@ public class PCPartPicker {
         }
     }
 
-    //parses files and checks for errors in formatting
+    //parses files and checks for errors in formatting within files && closes input file
     private static void parseFile(Scanner input, String fileName) {
         while (input.hasNext()) {
             String nextLine = input.nextLine();
@@ -192,6 +192,8 @@ public class PCPartPicker {
         Double maxGPUBenchmark = findMaxBenchmark(gpuList, gpuMap).getBenchmark();
         Double max = 0.0;
 
+
+        //iterate through all possibilities and find best benchmark ratio
         for(int i =0; i <= possibleCPUS; i++){
             for (int j = 0; j <= possibleGPUS; j++){
                 if(cpuMap.get(cpuList.get(i)).getPrice()+gpuMap.get(gpuList.get(j)).getPrice() <= maxBudget){
