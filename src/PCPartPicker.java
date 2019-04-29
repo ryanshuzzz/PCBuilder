@@ -26,7 +26,7 @@ public class PCPartPicker {
             File inputGPUFile = new File(gpuFile);
             input = new Scanner(inputGPUFile);
             parseFile(input, gpuFile);
-        }
+
         Heapsort cpuSort = new Heapsort();
         Heapsort gpuSort = new Heapsort();
         cpuSort.heapSort("price", cpuList, cpuMap);
@@ -63,7 +63,7 @@ public class PCPartPicker {
                 System.out.printf("----------------------------%nTotal Cost:  $%-10s%n", finalCPU.getPrice() + finalGPU.getPrice());
             } else {
                 System.out.println("This budget is too low for any possible builds.");
-            }}
+            }}}
         }
     }
 
